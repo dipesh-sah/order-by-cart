@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="OrderByLink\Subscriber\FrontendSubscriber">
+            <argument type="service" id="Shopware\Core\Checkout\Cart\SalesChannel\CartService"/>
+            <argument type="service" id="product.repository"/>
+            <argument type="service" id="Symfony\Component\HttpFoundation\RequestStack"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+            <argument type="service" id="logger"/>
+            <argument type="service" id="Shopware\Core\System\SalesChannel\Context\SalesChannelContextService"/>
+            <tag name="kernel.event_subscriber" />
+        </service>
+        <service id="company.plugin.logger" class="Monolog\Logger">
+            <argument type="string">Company_PluginName</argument>
+            <argument type="collection">
+                <argument type="service" id="company.plugin.rotatingHandler"/>
+            </argument>
+        </service>
+
+        <service id="company.plugin.rotatingHandler" class="Monolog\Handler\RotatingFileHandler">
+            <argument type="string">%kernel.logs_dir%/company-name-%kernel.environment%.log</argument>
+        </service>
+    </services>
+</container>
